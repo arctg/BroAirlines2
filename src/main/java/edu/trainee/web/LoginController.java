@@ -1,0 +1,87 @@
+package edu.trainee.web;
+
+import edu.trainee.domain.Roles;
+import edu.trainee.domain.User;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by dennis on 9/18/2015.
+ */
+@Controller
+public class LoginController extends AbstractController {
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String viewTestPage(Model model) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("message", "Hello from testController!");
+        model.addAttribute("helloName", name);
+        System.out.println();
+        return "test";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login(Model msgModel,
+            @RequestParam(value = "logout", required = false) String logout,
+            @RequestParam(value = "error", required = false) String error
+    ) {
+        ModelAndView model = new ModelAndView();
+        if (error != null) {
+            model.addObject("error", "Invalid username or password!");
+        }
+        if (logout != null) {
+            model.addObject("msg", "You've been logged out successfully.");
+        }
+
+        if(msgModel.containsAttribute("regOk")){
+            model.addObject("msg","Registration successful");
+        }
+
+        model.setViewName("login");
+        return "login";
+
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String goToRegister() {
+        return "register";
+    }
+
+    @RequestMapping(value = "reg", method = RequestMethod.POST)
+    public String register(Model model, @ModelAttribute User newUser ) {
+
+        if (userService.isExisting(newUser.getEmail())) {
+            System.out.println("Hello from register controller");
+            model.addAttribute("error", "Such user exists!");
+            return "register";
+        }
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        List<Roles> list = new ArrayList<>();
+        list.add(Roles.ROLE_USER);
+
+        newUser.setRoles(list);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        newUser.setEnabled(true);
+        Long Id = userService.save(newUser);
+
+        System.out.println("User with ID " + Id  + " has been created");
+        model.addAttribute("msg","Registration successful");
+
+        return login(model,null,null);
+    }
+
+
+}
