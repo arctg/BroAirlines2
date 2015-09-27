@@ -33,9 +33,10 @@ public class LoginController extends AbstractController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(Model msgModel,
+    public ModelAndView login(Model msgModel,
             @RequestParam(value = "logout", required = false) String logout,
-            @RequestParam(value = "error", required = false) String error
+            @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "reg", required = false) String reg
     ) {
         ModelAndView model = new ModelAndView();
         if (error != null) {
@@ -45,12 +46,13 @@ public class LoginController extends AbstractController {
             model.addObject("msg", "You've been logged out successfully.");
         }
 
-        if(msgModel.containsAttribute("regOk")){
+        if(reg != null){
             model.addObject("msg","Registration successful");
         }
 
         model.setViewName("login");
-        return "login";
+        //return "login";
+        return model;
 
     }
 
@@ -64,7 +66,7 @@ public class LoginController extends AbstractController {
 
         if (userService.isExisting(newUser.getEmail())) {
             System.out.println("Hello from register controller");
-            model.addAttribute("error", "Such user exists!");
+            model.addAttribute("error", "User with such email exists!");
             return "register";
         }
 
@@ -77,10 +79,9 @@ public class LoginController extends AbstractController {
         newUser.setEnabled(true);
         Long Id = userService.save(newUser);
 
-        System.out.println("User with ID " + Id  + " has been created");
-        model.addAttribute("msg","Registration successful");
+        if (Id != null) model.addAttribute("reg","Registration successful");
 
-        return login(model,null,null);
+        return "redirect:login";
     }
 
 

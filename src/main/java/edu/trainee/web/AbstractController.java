@@ -2,6 +2,7 @@ package edu.trainee.web;
 
 import edu.trainee.domain.Airplane;
 import edu.trainee.domain.City;
+import edu.trainee.domain.Flight;
 import edu.trainee.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
@@ -53,6 +54,22 @@ public abstract class AbstractController {
                             city = cityService.getCityById(ID);
                         }
                         setValue(city);
+                    }
+                });
+    }
+
+    @InitBinder
+    protected void flightBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Flight.class,
+                new PropertyEditorSupport() {
+                    @Override
+                    public void setAsText(String id) {
+                        Flight flight = null;
+                        if (id != null && !id.trim().isEmpty()) {
+                            Long ID = Long.valueOf(id);
+                            flight = flightService.getFlightById(ID);
+                        }
+                        setValue(flight);
                     }
                 });
     }

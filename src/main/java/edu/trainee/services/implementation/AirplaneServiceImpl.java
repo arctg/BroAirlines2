@@ -52,7 +52,7 @@ public class AirplaneServiceImpl implements AirplaneService {
 
         for (Airplane airplane : getAllAirplanes()) {
             for (Flight flight : flightRepository.getAllFlights()) {
-                if ((flight.getAirplane().equals(airplane) & CurrentDate.getCurrentDate().compareTo(flight.getFlightTime().getTime()) <= 0)) {
+                if ((flight.getAirplane().equals(airplane) & CurrentDate.getCurrentDate().compareTo(flight.getFlightTime()) <= 0)) {
                     wishList.remove(airplane);
                     System.out.println(airplane);
                 }

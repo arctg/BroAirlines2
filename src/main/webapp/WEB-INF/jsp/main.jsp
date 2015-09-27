@@ -56,7 +56,13 @@
 <div id="content">
     <div id="content1">
         <div align="center" id="centre">
-            <form name="findflight" method="POST" action="Controller">
+
+            <c:if test="${not empty error}">
+                <div class="error">${error}</div>
+            </c:if>
+
+
+            <form name="findflight" method="GET" action="findflight">
                 <input type="hidden" name="command" value="findflight"/>
                 From:<br/>
                 <select name="fromcity" id="input">
@@ -78,6 +84,128 @@
                 </select><br/>
                 <input type="submit" value="Find flight!" id="link">
             </form>
+
+
+            <c:if test="${not empty result}">
+
+
+                <div style="margin-top: 50px; margin-bottom: 50px">
+                    <div style="margin-bottom: 30px; margin-top: 10px; text-align: center; font-family: Tahoma; font-size: 13px;">
+                        <div>Direction: ${result.get(0).flyFromCity.name} - ${result.get(0).flyToCity.name}</div>
+                        <div>Date range: ${daterangefrom} - ${daterangeto}</div>
+                    </div>
+                    <h4>Result:</h4>
+                    <table class="table-style-one">
+                        <td><c:out value="ID"/></td>
+                        <td><c:out value="From - To"/></td>
+                        <td><c:out value="Flight Date"/></td>
+                        <td><c:out value="ID - Airplane"/></td>
+                        <td><c:out value="Avaliable/Total seats"/></td>
+                        <td><c:out value="Price"/></td>
+                        <c:forEach var="flight" items="${result}">
+                            <tr>
+                                <td><c:out value="${flight.id}"/></td>
+                                <td><c:out value="${flight.flyFromCity.name} - ${flight.flyToCity.name}"/></td>
+                                <td><c:out value="${flight.flightTime.time.toLocaleString()}"/></td>
+                                <td><c:out value="${flight.airplane.id} - ${flight.airplane.vendorName}"/></td>
+                                <td><c:out
+                                        value="${flight.airplane.numOfSeats-flight.seats.size()}/${flight.airplane.numOfSeats}"/></td>
+                                <td><c:out value="${flight.initPrice}"/></td>
+                                <td>
+
+                                    <form action="" method="post">
+                                        <input type="submit" value="Order!" id="link">
+                                        <sec:csrfInput/>
+                                    </form>
+
+                                </td>
+                                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                                    <td>
+
+                                        <form action="editflight" method="post">
+                                            <input type="hidden" name="id" value="${flight.id}">
+                                            <input type="submit" value="Edit!" id="link">
+                                            <sec:csrfInput/>
+                                        </form>
+
+                                    </td>
+                                    <td>
+
+                                        <form action="#" method="post">
+                                            <input type="submit" value="Delete!" id="link">
+                                            <sec:csrfInput/>
+                                        </form>
+
+                                    </td>
+                                </sec:authorize>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                    <div>
+                        <c:forEach begin="1" end="${pages}" var="val">
+                            <a href="<c:url value="/admin/airplanes?page=${val}"/>">${val}</a>
+                        </c:forEach>
+                    </div>
+                </div>
+
+            </c:if>
+
+
+            <div style="margin-top: 50px; margin-bottom: 50px">
+                <h4>10 nearest flights</h4>
+                <table class="table-style-one">
+                    <td><c:out value="ID"/></td>
+                    <td><c:out value="From - To"/></td>
+                    <td><c:out value="Flight Date"/></td>
+                    <td><c:out value="ID - Airplane"/></td>
+                    <td><c:out value="Avaliable/Total seats"/></td>
+                    <td><c:out value="Price"/></td>
+                    <c:forEach var="flight" items="${flights}">
+                        <tr>
+                            <td><c:out value="${flight.id}"/></td>
+                            <td><c:out value="${flight.flyFromCity.name} - ${flight.flyToCity.name}"/></td>
+                            <td><c:out value="${flight.flightTime.time.toLocaleString()}"/></td>
+                            <td><c:out value="${flight.airplane.id} - ${flight.airplane.vendorName}"/></td>
+                            <td><c:out
+                                    value="${flight.airplane.numOfSeats-flight.seats.size()}/${flight.airplane.numOfSeats}"/></td>
+                            <td><c:out value="${flight.initPrice}"/></td>
+                            <td>
+
+                                <form action="" method="post">
+                                    <input type="submit" value="Order!" id="link">
+                                    <sec:csrfInput/>
+                                </form>
+
+                            </td>
+                            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                                <td>
+
+                                    <form action="editflight" method="post">
+                                        <input type="hidden" name="id" value="${flight.id}">
+                                        <input type="submit" value="Edit!" id="link">
+                                        <sec:csrfInput/>
+                                    </form>
+
+                                </td>
+                                <td>
+
+                                    <form action="#" method="post">
+                                        <input type="submit" value="Delete!" id="link">
+                                        <sec:csrfInput/>
+                                    </form>
+
+                                </td>
+                            </sec:authorize>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <div>
+                    <c:forEach begin="1" end="${pages}" var="val">
+                        <a href="<c:url value="/admin/airplanes?page=${val}"/>">${val}</a>
+                    </c:forEach>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

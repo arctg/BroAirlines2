@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/edu/trainee/logic/CurrentDate.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/java/edu/trainee/logic/PriceFixer.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/main/resources/appContext.xml" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/main/resources/jdbc.properties" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/main/resources/repositoryContext.xml" charset="windows-1252" />

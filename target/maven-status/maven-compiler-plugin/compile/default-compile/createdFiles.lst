@@ -16,9 +16,11 @@ edu\trainee\web\AbstractController.class
 edu\trainee\services\AirplaneService.class
 edu\trainee\web\LoginController.class
 edu\trainee\logic\CurrentDate.class
+edu\trainee\web\AbstractController$3.class
 edu\trainee\services\UserService.class
 edu\trainee\domain\Airplane.class
 edu\trainee\services\CityService.class
+edu\trainee\logic\PriceFixer.class
 edu\trainee\repository\FlightRepository.class
 edu\trainee\repository\implementation\JPACityRepository.class
 edu\trainee\domain\Order.class

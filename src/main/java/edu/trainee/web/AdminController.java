@@ -76,7 +76,20 @@ public class AdminController extends AbstractController {
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String viewAdminPanelPage(Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        model.addAttribute("airplanes", airplaneService.getFreeAirplanes());
+        List<Airplane> airplaneList = airplaneService.getFreeAirplanes();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String now = format.format(CurrentDate.getCurrentDate().getTime());
+        model.addAttribute("now",now);
+        System.out.println("Now is: " + now);
+
+        if (model.containsAttribute("flight")){
+            Flight flight = (Flight)model.asMap().get("flight");
+            airplaneList.add(flight.getAirplane());
+            String formatted = format.format(flight.getFlightTime().getTime());
+            model.addAttribute("flightTime",formatted);
+        }
+
+        model.addAttribute("airplanes", airplaneList);
         model.addAttribute("cities", cityService.getAllCities());
         return "admin";
     }
@@ -111,7 +124,8 @@ public class AdminController extends AbstractController {
                             @RequestParam(value = "price") String price) {
 
         Flight flight = new Flight();
-        Date currentDate = CurrentDate.getCurrentDate();
+        Calendar currentDate = CurrentDate.getCurrentDate();
+        Calendar setDateCal = new GregorianCalendar();
         Date setDate = null;
         BigDecimal fixedPrice = null;
         String matchCorrectLine = "([-+]?[0-9]*)(\\.?[0-9]+)";
@@ -131,9 +145,12 @@ public class AdminController extends AbstractController {
 
         try {
             setDate = new SimpleDateFormat("yy-MM-dd HH:mm").parse(dateFromForm);
+            setDateCal.setTime(setDate);
         } catch (ParseException ea) {
             try {
                 setDate = new SimpleDateFormat("yy-MM-dd").parse(dateFromForm);
+
+                setDateCal.setTime(setDate);
             } catch (ParseException e) {
                 System.out.println(e);
                 model.addAttribute("error", "incorrect Date format");
@@ -141,13 +158,13 @@ public class AdminController extends AbstractController {
             }
         }
 
-        Calendar calendar = new GregorianCalendar();
+        Calendar calendar = CurrentDate.getCurrentDate();
         calendar.setTime(setDate);
 
         if (cityFrom.equals(cityTo)) {
             model.addAttribute("error", "cities match");
             return viewAdminPanelPage(model);
-        } else if (currentDate.compareTo(setDate) >= 0) {
+        } else if (currentDate.compareTo(setDateCal) >= 0) {
             model.addAttribute("error", "flight date < current date");
             return viewAdminPanelPage(model);
         } else {
@@ -163,6 +180,14 @@ public class AdminController extends AbstractController {
         flightService.save(flight);
 
         model.addAttribute("msg", "flight has been added successfully");
+        return viewAdminPanelPage(model);
+    }
+
+
+    @RequestMapping(value = "editflight",method = RequestMethod.POST)
+    public String editFlight(Model model, @RequestParam(value = "id") Flight flight){
+        model.addAttribute("flight",flight);
+        System.out.println(flight);
         return viewAdminPanelPage(model);
     }
 

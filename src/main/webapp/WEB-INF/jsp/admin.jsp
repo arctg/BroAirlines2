@@ -19,11 +19,11 @@
 <body>
 <div id="header">
     <div id="hello">
-        hello,
+        Hello,
         <b><sec:authentication property="principal.username" /></b>
 
     </div>
-    <%--<div id="hello"><fmt:message key="todayis"/>: <mytag:todayis/></div>--%>
+    <div id="hello">Today is: ${now.toString()}</div>
     <h3 id="title">BroAirlines</h3>
 
     <div id="realheader">
@@ -73,26 +73,26 @@
                 Vendor name and seats<br/>
                 <select name="airplane" id="input">
                     <c:forEach var="item" items="${airplanes}">
-                        <option value="${item.id}" ${item.vendorName == selectedDept ? 'selected="selected"' : ''}>${item.vendorName}: ${item.numOfSeats}</option>
+                        <option value="${item.id}" ${item.vendorName == flight.airplane.vendorName ? 'selected="selected"' : ''}>${item.vendorName}: ${item.numOfSeats}</option>
                     </c:forEach>
                 </select><br/>
                 From:<br/>
                 <select name="fromcity" id="input">
                     <c:forEach var="item" items="${cities}">
-                        <option value="${item.id}" ${item.getName() == selectedDept ? 'selected="selected"' : ''}>${item.getName()}</option>
+                        <option value="${item.id}" ${item.name == flight.flyFromCity.name ? 'selected="selected"' : ''}>${item.name}</option>
                     </c:forEach>
                 </select><br/>
                 Date,time:<br/>
-                <input name="date" class="tcal" style="border: dotted 1px; border-radius: 3px" value="" size="16"
+                <input name="date" class="tcal" style="border: dotted 1px; border-radius: 3px" value="${flightTime}" size="16"
                        maxlength="16" required><br/>
                 To:<br/>
                 <select name="tocity" id="input">
                     <c:forEach var="item" items="${cities}">
-                        <option value="${item.id    }" ${item.getName() == selectedDept ? 'selected="selected"' : ''}>${item.getName()}</option>
+                        <option value="${item.id}" ${item.name == flight.flyToCity.name ? 'selected="selected"' : ''}>${item.name}</option>
                     </c:forEach>
                 </select><br/>
                 Flight cost:<br/>
-                <input name="price" id="input" type="number" step="0.01" min="0" value="" size="6" maxlength="6"
+                <input name="price" id="input" type="number" step="0.01" min="0" value="${flight.initPrice}" size="6" maxlength="6"
                        required><br/>
                 <input type="submit" value="Add flight" id="link">
                 <sec:csrfInput/>

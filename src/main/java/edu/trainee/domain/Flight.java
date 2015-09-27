@@ -14,6 +14,8 @@ import java.util.List;
 @Table(name = "flights")
 @NamedQueries({
         @NamedQuery(name = "Flight.getAll", query = "select f from Flight f"),
+        @NamedQuery(name = "Flight.getAllSortedByDate", query = "select f from Flight f where f.flightTime>:currentTime order by f.flightTime"),
+        @NamedQuery(name = "Flight.find", query = "select f from Flight f where f.flightTime between :beginDate and :endDate and f.flyFromCity=:fromCity and f.flyToCity=:toCity")
         //Other named query
 })
 public class Flight {

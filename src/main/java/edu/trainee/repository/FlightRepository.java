@@ -1,7 +1,9 @@
 package edu.trainee.repository;
 
+import edu.trainee.domain.City;
 import edu.trainee.domain.Flight;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -13,4 +15,6 @@ public interface FlightRepository {
     public Long save(Flight flight);
     public void update(Flight flight);
     public void delete(Integer id);
+    public List<Flight> get10Nearest(Calendar calendar);
+    public List<Flight> find(City fromCity,City toCity, Calendar beginDate, Calendar endDate);
 }
