@@ -6,18 +6,18 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <fmt:setBundle basename="manager.messages"/>
-    <title>Register</title>
+
+    <title><spring:message code="reg.title.Register"/></title>
 </head>
 <div style="padding-top: 100px">
-    <h3 id="title">Register</h3>
+    <h3 id="title"><spring:message code="reg.title2.Register"/></h3>
 </div>
 </hr id="line">
 <div>
@@ -28,20 +28,23 @@
         </c:if>
 
         <form name="registerForm" method="POST" action="reg">
-            First name:<br/>
+            <spring:message code="reg.fistname"/>:<br/>
             <input type="text" name="firstName" value="" size="32" maxlength="32" required autocomplete="off"> <br/>
-            Last name:<br/>
+            <spring:message code="reg.lastname"/>:<br/>
             <input type="text" id="one" name="lastName" value="" size="32" maxlength="32" required autocomplete="off"><br/>
-            Email:<br/>
+            <spring:message code="email"/>:<br/>
             <input type="email" id="two" name="email" value="" size="32" maxlength="32" required autocomplete="off"><br/>
-            Password<br/>
+            <spring:message code="password"/><br/>
             <input type="password" name="password" value="" size="32" maxlength="32" required autocomplete="off"><br/>
-            <td>Phone:<br/>example:0931234567<br/></td>
+            <td><spring:message code="reg.phone"/>:<br/><spring:message code="reg.example"/>:0931234567<br/></td>
             <input type="text" name="phone" value="" size="12" maxlength="12" required autocomplete="off"><br/>
-            <input type="submit" name="submit" value="Register!" id="link">
+            <input type="submit" name="submit" value="<spring:message code="reg.reg"/>" id="link">
             <sec:csrfInput/>
         </form>
-        <a href="<c:url value="/login"/>" id="link">Login</a>
+        <a href="<c:url value="/login"/>" id="link"><spring:message code="reg.login"/></a>
+        <div style="margin-top: 3px;">
+            <a href="?lang=en">en</a>|<a href="?lang=ru">ru</a>
+        </div>
     </div>
 </div>
 </body>

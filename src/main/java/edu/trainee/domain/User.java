@@ -10,7 +10,8 @@ import java.util.List;
 @Table(name = "users")
 @NamedQueries({
         @NamedQuery(name = "User.getAll", query = "select u from User u"),
-        @NamedQuery(name = "User.getEmail", query = "select u.email from User u where email=:email")
+        @NamedQuery(name = "User.getEmail", query = "select u.email from User u where u.email=:email"),
+        @NamedQuery(name = "User.getUserByEmail", query = "select u from User u where u.email=:email")
         //Other named query
 })
 public class User {

@@ -5,6 +5,7 @@ import edu.trainee.domain.City;
 import edu.trainee.domain.Flight;
 import edu.trainee.domain.Region;
 import edu.trainee.logic.CurrentDate;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +35,7 @@ public class AdminController extends AbstractController {
         return "admin/cities";
     }
 
+    @Secured(value = "ROLE_ADMIN")
     @RequestMapping(value = "admin/addcities", method = RequestMethod.POST)
     public String addCities(Model model,
                             @RequestParam(value = "lines", required = false) String lines) {
@@ -65,6 +67,7 @@ public class AdminController extends AbstractController {
         return "redirect:cities";
     }
 
+    @Secured(value = "ROLE_ADMIN")
     @RequestMapping(value = "admin/addairplane", method = RequestMethod.POST)
     public String addAirplane(Model model, @ModelAttribute Airplane airplane) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -79,14 +82,14 @@ public class AdminController extends AbstractController {
         List<Airplane> airplaneList = airplaneService.getFreeAirplanes();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String now = format.format(CurrentDate.getCurrentDate().getTime());
-        model.addAttribute("now",now);
+        model.addAttribute("now", now);
         System.out.println("Now is: " + now);
 
-        if (model.containsAttribute("flight")){
-            Flight flight = (Flight)model.asMap().get("flight");
+        if (model.containsAttribute("flight")) {
+            Flight flight = (Flight) model.asMap().get("flight");
             airplaneList.add(flight.getAirplane());
             String formatted = format.format(flight.getFlightTime().getTime());
-            model.addAttribute("flightTime",formatted);
+            model.addAttribute("flightTime", formatted);
         }
 
         model.addAttribute("airplanes", airplaneList);
@@ -115,13 +118,15 @@ public class AdminController extends AbstractController {
         return "admin/airplanes";
     }
 
+    @Secured(value = "ROLE_ADMIN")
     @RequestMapping(value = "addflight", method = RequestMethod.POST)
     public String addFlight(Model model,
                             @RequestParam(value = "airplane") Airplane airplane,
                             @RequestParam(value = "fromcity") City cityFrom,
                             @RequestParam(value = "tocity") City cityTo,
                             @RequestParam(value = "date") String dateFromForm,
-                            @RequestParam(value = "price") String price) {
+                            @RequestParam(value = "price") String price,
+                            @RequestParam(value = "id", required = false) Long id) {
 
         Flight flight = new Flight();
         Calendar currentDate = CurrentDate.getCurrentDate();
@@ -168,14 +173,28 @@ public class AdminController extends AbstractController {
             model.addAttribute("error", "flight date < current date");
             return viewAdminPanelPage(model);
         } else {
+            //System.out.println("ID is: " + id.toString());
+            if (id != null) {
+                flight.setId(id);
+
+            }
             flight.setFlightTime(calendar);
             flight.setFlyFromCity(cityFrom);
             flight.setFlyToCity(cityTo);
             flight.setInitPrice(fixedPrice);
-            flight.setSeats(new ArrayList<>(airplane.getNumOfSeats()));
+            flight.setTempPrice(fixedPrice);
+            //List<Long> longList = new ArrayList<>(airplane.getNumOfSeats());
+            List<Long> longList = Arrays.asList(new Long[airplane.getNumOfSeats()]);
+            flight.setSeats(longList);
             flight.setAirplane(airplane);
-            flight.setFlightCreationTime(Calendar.getInstance());
+            if (id == null) {
+                flight.setFlightCreationTime(Calendar.getInstance());
+            } else
+                flight.setFlightCreationTime(flightService.getFlightById(id).getFlightCreationTime());
+
         }
+
+        System.out.println("!!!!!!" + flight.getSeats().size());
 
         flightService.save(flight);
 
@@ -184,9 +203,11 @@ public class AdminController extends AbstractController {
     }
 
 
-    @RequestMapping(value = "editflight",method = RequestMethod.POST)
-    public String editFlight(Model model, @RequestParam(value = "id") Flight flight){
-        model.addAttribute("flight",flight);
+    @Secured(value = "ROLE_ADMIN")
+    @RequestMapping(value = "editflight", method = RequestMethod.POST)
+    public String editFlight(Model model, @RequestParam(value = "id") Flight flight) {
+        flight.setInitPrice(flight.getInitPrice().subtract(flightService.getExtra(flight.getId())));
+        model.addAttribute("flight", flight);
         System.out.println(flight);
         return viewAdminPanelPage(model);
     }

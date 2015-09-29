@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class PriceFixer {
-    public static final BigDecimal PRIORITY_BOARDING = BigDecimal.valueOf(20,2);
-    public static final BigDecimal BAGGAGE = BigDecimal.valueOf(15,2);
+    public static final BigDecimal PRIORITY_BOARDING = BigDecimal.valueOf(20).setScale(2);
+    public static final BigDecimal BAGGAGE = BigDecimal.valueOf(15).setScale(2);
 
 
     /**
@@ -50,7 +50,7 @@ public class PriceFixer {
 
         Calendar currentDate = CurrentDate.getCurrentDate();
 
-        System.out.println("Cho" + hoursBetween(createDate.getTime(), flightDate.getTime()));
+        //System.out.println("Cho" + hoursBetween(createDate.getTime(), flightDate.getTime()));
 
 
 //        Date date = currentDate.getTime() - createDate.getTime();
@@ -62,9 +62,9 @@ public class PriceFixer {
         System.out.println("C:" + c);
 
         dateCoeficient = BASE_COEFICIENT.multiply(flightPrice).multiply(BigDecimal.valueOf(c));
-        System.out.println("Date coef: " + dateCoeficient.setScale(2,BigDecimal.ROUND_DOWN));
+        //System.out.println("Date coef: " + dateCoeficient.setScale(2,BigDecimal.ROUND_DOWN));
         placeCoeficient = BASE_COEFICIENT.multiply(flightPrice).multiply(BigDecimal.valueOf(((double) numOfBusyPlaces)/(double) numOfPlaces));
-        System.out.println("Place coef: " + placeCoeficient.setScale(2,BigDecimal.ROUND_DOWN));
+        //System.out.println("Place coef: " + placeCoeficient.setScale(2,BigDecimal.ROUND_DOWN));
         BigDecimal priceCoeficient = dateCoeficient.add(placeCoeficient);
 
         return priceCoeficient.setScale(2,BigDecimal.ROUND_DOWN);

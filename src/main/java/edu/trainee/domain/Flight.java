@@ -14,8 +14,15 @@ import java.util.List;
 @Table(name = "flights")
 @NamedQueries({
         @NamedQuery(name = "Flight.getAll", query = "select f from Flight f"),
-        @NamedQuery(name = "Flight.getAllSortedByDate", query = "select f from Flight f where f.flightTime>:currentTime order by f.flightTime"),
-        @NamedQuery(name = "Flight.find", query = "select f from Flight f where f.flightTime between :beginDate and :endDate and f.flyFromCity=:fromCity and f.flyToCity=:toCity")
+        @NamedQuery(name = "Flight.getAllSortedByDate", query = "select f " +
+                "from Flight f " +
+                "where f.flightTime>:currentTime and f.seats.size<f.airplane.numOfSeats " +
+                "order by f.flightTime"),
+        @NamedQuery(name = "Flight.find", query = "select f " +
+                "from Flight f " +
+                "where f.flightTime " +
+                "between :beginDate and :endDate " +
+                "and f.flyFromCity=:fromCity and f.flyToCity=:toCity and  f.seats.size<f.airplane.numOfSeats")
         //Other named query
 })
 public class Flight {
@@ -32,18 +39,20 @@ public class Flight {
     private Calendar flightTime;
     @Column(nullable = false)
     private BigDecimal initPrice;
+    @Column
+    private BigDecimal tempPrice;
     @ManyToOne
-    @JoinColumn(name = "airplane_id",nullable = false)
+    @JoinColumn(name = "airplane_id", nullable = false)
     private Airplane airplane;
     @ManyToOne
-    @JoinColumn(name = "fly_from",nullable = false)
+    @JoinColumn(name = "fly_from", nullable = false)
     private City flyFromCity;
     @ManyToOne
-    @JoinColumn(name = "fly_to",nullable = false)
+    @JoinColumn(name = "fly_to", nullable = false)
     private City flyToCity;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "seats")
-    private List<Long> seats = new ArrayList<>();
+    private List<Long> seats;
 
     public Flight() {
     }
@@ -55,10 +64,12 @@ public class Flight {
             Airplane airplane,
             City flyFromCity,
             City flyToCity,
-            List<Long> seats) {
+            List<Long> seats,
+            BigDecimal tempPrice) {
         this.flightCreationTime = flightCreationTime;
         this.flightTime = flightTime;
         this.initPrice = initPrice;
+        this.tempPrice = tempPrice;
         this.airplane = airplane;
         this.flyFromCity = flyFromCity;
         this.flyToCity = flyToCity;
@@ -129,6 +140,14 @@ public class Flight {
         this.seats = seats;
     }
 
+    public BigDecimal getTempPrice() {
+        return tempPrice;
+    }
+
+    public void setTempPrice(BigDecimal tempPrice) {
+        this.tempPrice = tempPrice;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -158,6 +177,7 @@ public class Flight {
         return result;
     }
 
+
     @Override
     public String toString() {
         return "Flight{" +
@@ -165,9 +185,11 @@ public class Flight {
                 ", flightCreationTime=" + flightCreationTime +
                 ", flightTime=" + flightTime +
                 ", initPrice=" + initPrice +
+                ", tempPrice=" + tempPrice +
                 ", airplane=" + airplane +
                 ", flyFromCity=" + flyFromCity +
                 ", flyToCity=" + flyToCity +
+                ", seats=" + seats +
                 '}';
     }
 }

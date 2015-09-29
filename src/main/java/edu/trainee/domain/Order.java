@@ -2,6 +2,7 @@ package edu.trainee.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Calendar;
 
 /**
  * Created by dennis on 9/15/2015.
@@ -11,6 +12,11 @@ import java.math.BigDecimal;
 @Table(name = "orders")
 @NamedQueries({
         @NamedQuery(name = "Order.getAll", query = "select o from Order o"),
+        @NamedQuery(name = "Order.getNearest", query = "select o " +
+                "from Order o " +
+                "where o.flight.flightTime>:currentTime and o.user.id=:id " +
+                "order by o.flight.flightTime"),
+        @NamedQuery(name = "Order.getPast",query = "select o from Order o where o.flight.flightTime<:currentTime and o.user.id=:id order by o.orderCreationTime")
         //Other named query
 })
 public class Order {
@@ -31,6 +37,11 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @Column(nullable = false)
+    private Long seat;
+    @Column(name = "order_time", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar orderCreationTime;
 
     public Order() {
     }
@@ -39,21 +50,25 @@ public class Order {
                  User user,
                  Boolean luggage,
                  Boolean priorityBoarding,
-                 BigDecimal totalPrice) {
+                 BigDecimal totalPrice,
+                 Long seat,
+                 Calendar orderCreationTime) {
         this.flight = flight;
         this.luggage = luggage;
         this.priorityBoarding = priorityBoarding;
         this.totalPrice = totalPrice;
         this.user = user;
+        this.seat = seat;
+        this.orderCreationTime = orderCreationTime;
     }
 
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Flight getFlight() {
         return flight;
@@ -95,6 +110,21 @@ public class Order {
         this.user = user;
     }
 
+    public Long getSeat() {
+        return seat;
+    }
+
+    public void setSeat(Long seat) {
+        this.seat = seat;
+    }
+
+    public Calendar getOrderCreationTime() {
+        return orderCreationTime;
+    }
+
+    public void setOrderCreationTime(Calendar orderCreationTime) {
+        this.orderCreationTime = orderCreationTime;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -132,6 +162,8 @@ public class Order {
                 ", priorityBoarding=" + priorityBoarding +
                 ", totalPrice=" + totalPrice +
                 ", user=" + user +
+                ", seat=" + seat +
+                ", orderCreationTime=" + orderCreationTime.getTime() +
                 '}';
     }
 }

@@ -1,6 +1,5 @@
 package edu.trainee.repository;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import edu.trainee.domain.User;
 
 import java.util.List;
@@ -10,6 +9,7 @@ import java.util.List;
  */
 public interface UserRepository {
     public User getUserById(Long id);
+    public User getUserByEmail(String email);
     public List<User> getAllUsers();
     public Long save(User user);
     public void update(User user);

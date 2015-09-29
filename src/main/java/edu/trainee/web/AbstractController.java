@@ -25,6 +25,8 @@ public abstract class AbstractController {
     protected AirplaneService airplaneService;
     @Autowired
     protected FlightService flightService;
+    @Autowired
+    protected OrderService orderService;
 
     @InitBinder
     protected void airplaneBinder(WebDataBinder binder) {

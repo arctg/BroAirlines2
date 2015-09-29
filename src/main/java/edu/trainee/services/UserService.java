@@ -8,4 +8,5 @@ import edu.trainee.domain.User;
 public interface UserService {
     public Boolean isExisting(String email);
     public Long save(User user);
+    public User getUserByEmail(String email);
 }

@@ -8,7 +8,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <context:component-scan base-package="edu.trainee.services"/>
-    <sec:debug />
+    <!--<sec:debug />-->
 
     <!--<task:scheduler id="myScheduler" pool-size="10"/>-->
         <!--<task:annotation-driven scheduler="myScheduler"/>-->

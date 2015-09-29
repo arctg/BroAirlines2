@@ -20,11 +20,11 @@
 
 <div id="header">
     <div id="hello">
-        hello,
-        <b><sec:authentication property="principal.username"/></b>
-
+        <b style="color:tomato">
+            <sec:authentication property="principal.username"/>
+        </b>
     </div>
-    <%--<div id="hello"><fmt:message key="todayis"/>: <mytag:todayis/></div>--%>
+    <div id="hello">Today is: ${now.toString()}</div>
     <h3 id="title">BroAirlines</h3>
 
     <div id="realheader">

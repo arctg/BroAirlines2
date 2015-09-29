@@ -31,7 +31,7 @@
         <intercept-url pattern="/register" access="isAnonymous()"/>
         <intercept-url pattern="/reg" access="isAnonymous()"/>
         <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
 
 
         <form-login
@@ -72,7 +72,7 @@
         <authentication-provider>
             <user-service>
                 <user name="admin@broairlines" password="$2a$10$gZCH676ylPzFVWXe.WBf3uiJ51t1zQSSBXweMACYBeR32MdVzKcMe"
-                      authorities="ROLE_USER,ROLE_ADMIN"/>
+                      authorities="ROLE_ADMIN"/>
             </user-service>
 
             <password-encoder ref="encoder">

@@ -56,4 +56,10 @@ public class JPAUserRepository implements UserRepository {
         }
         return false;
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        TypedQuery<User> typedQuery = em.createNamedQuery("User.getUserByEmail",User.class).setParameter("email",email);
+        return typedQuery.getSingleResult();
+    }
 }

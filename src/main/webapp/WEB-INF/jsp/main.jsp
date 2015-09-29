@@ -10,43 +10,52 @@
 <%--<%@ taglib uri="/jstl/mytags.tld" prefix="mytag" %>--%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <fmt:setBundle basename="manager.messages"/>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script language="JavaScript" src="js/calendar/tcal.js"></script>
     <link rel="stylesheet" href="js/calendar/tcal.css">
-    <title>Main</title>
+    <title><spring:message code="Main"/></title>
 </head>
 <body>
 <div id="header">
-    <%--<div id="hello"><fmt:message key="hello"/>, <mytag:hello email="${sessionScope.client.getEmail()}"/></div>--%>
-    <%--<div id="hello"><fmt:message key="todayis"/>: <mytag:todayis/></div>--%>
+    <div id="hello">
+        <div>
+            <a href="?lang=en">en</a>|<a href="?lang=ru">ru</a>
+        </div><spring:message code="hello"/>,
+        <b style="color:cadetblue">
+            <sec:authentication property="principal.username"/>
+        </b>
+    </div>
+    <div id="hello"><spring:message code="todayis"/>: ${now.time}</div>
+
     <h3 id="title">BroAirlines</h3>
 
     <div id="realheader">
         <div id="line">
             <c:url var="logoutUrl" value="/logout"/>
             <form action="${logoutUrl}" method="post">
-                <input type="submit" value="Logout" id="link">
+                <input type="submit" value="<spring:message code="Logout"/>" id="link">
                 <sec:csrfInput/>
             </form>
         </div>
         <div id="line">
             <div id="link">
-                <a href="<c:url value="/cabinet"/>">Cabinet</a>
+                <a href="<c:url value="/cabinet"/>"><spring:message code="Cabinet"/></a>
             </div>
         </div>
         <div id="line">
             <div id="link">
-                <a href="<c:url value="/main"/>" id="link">Main</a>
+                <a href="<c:url value="/main"/>" id="link"><spring:message code="Main"/></a>
             </div>
         </div>
 
         <sec:authorize access="hasRole('ROLE_ADMIN')">
             <div id="line">
                 <div id="link">
-                    <a href="<c:url value="/admin"/>">Admin panel</a>
+                    <a href="<c:url value="/admin"/>"><spring:message code="AdminPanel"/></a>
                 </div>
             </div>
         </sec:authorize>
@@ -54,7 +63,7 @@
     </div>
 </div>
 <div id="content">
-    <div id="content1">
+    <div id="content1" style="width:1000px">
         <div align="center" id="centre">
 
             <c:if test="${not empty error}">
@@ -64,25 +73,25 @@
 
             <form name="findflight" method="GET" action="findflight">
                 <input type="hidden" name="command" value="findflight"/>
-                From:<br/>
+                <spring:message code="adminpanel.from"/>:<br/>
                 <select name="fromcity" id="input">
                     <c:forEach var="item" items="${cities}">
                         <option value="${item.id}" ${item.getName() == selectedDept ? 'selected="selected"' : ''}>${item.getName()}</option>
                     </c:forEach>
                 </select><br/>
-                Begin date:<br/>
+                <spring:message code="main.begindate"/>:<br/>
                 <input name="begindate" class="tcal" style="border: dotted 1px; border-radius: 3px" value="" size="16"
                        maxlength="16" required><br/>
-                End date:<br/>
+                <spring:message code="main.enddate"/>:<br/>
                 <input name="enddate" class="tcal" style="border: dotted 1px; border-radius: 3px" value="" size="16"
                        maxlength="16" required><br/>
-                To:<br/>
+                <spring:message code="main.to"/>:<br/>
                 <select name="tocity" id="input">
                     <c:forEach var="item" items="${cities}">
                         <option value="${item.id}" ${item.getName() == selectedDept ? 'selected="selected"' : ''}>${item.getName()}</option>
                     </c:forEach>
                 </select><br/>
-                <input type="submit" value="Find flight!" id="link">
+                <input type="submit" value="<spring:message code="findflight"/>!" id="link">
             </form>
 
 
@@ -91,17 +100,17 @@
 
                 <div style="margin-top: 50px; margin-bottom: 50px">
                     <div style="margin-bottom: 30px; margin-top: 10px; text-align: center; font-family: Tahoma; font-size: 13px;">
-                        <div>Direction: ${result.get(0).flyFromCity.name} - ${result.get(0).flyToCity.name}</div>
-                        <div>Date range: ${daterangefrom} - ${daterangeto}</div>
+                        <div><spring:message code="direction"/>: ${result.get(0).flyFromCity.name} - ${result.get(0).flyToCity.name}</div>
+                        <div><spring:message code="result.date"/>: ${daterangefrom} - ${daterangeto}</div>
                     </div>
-                    <h4>Result:</h4>
+                    <h4><spring:message code="result.title"/>:</h4>
                     <table class="table-style-one">
-                        <td><c:out value="ID"/></td>
-                        <td><c:out value="From - To"/></td>
-                        <td><c:out value="Flight Date"/></td>
-                        <td><c:out value="ID - Airplane"/></td>
-                        <td><c:out value="Avaliable/Total seats"/></td>
-                        <td><c:out value="Price"/></td>
+                        <td><spring:message code="flightid"/></td>
+                        <td><spring:message code="direction"/></td>
+                        <td><spring:message code="flightdate"/></td>
+                        <td><spring:message code="airplane"/></td>
+                        <td><spring:message code="places"/></td>
+                        <td><spring:message code="price"/></td>
                         <c:forEach var="flight" items="${result}">
                             <tr>
                                 <td><c:out value="${flight.id}"/></td>
@@ -110,11 +119,12 @@
                                 <td><c:out value="${flight.airplane.id} - ${flight.airplane.vendorName}"/></td>
                                 <td><c:out
                                         value="${flight.airplane.numOfSeats-flight.seats.size()}/${flight.airplane.numOfSeats}"/></td>
-                                <td><c:out value="${flight.initPrice}"/></td>
+                                <td><c:out value="${flight.tempPrice}"/></td>
                                 <td>
 
-                                    <form action="" method="post">
-                                        <input type="submit" value="Order!" id="link">
+                                    <form action="placeanorder" method="post">
+                                        <input type="hidden" value="${flight.id}" name="id">
+                                        <input type="submit" value="<spring:message code="placeanorder"/>" id="link">
                                         <sec:csrfInput/>
                                     </form>
 
@@ -124,7 +134,7 @@
 
                                         <form action="editflight" method="post">
                                             <input type="hidden" name="id" value="${flight.id}">
-                                            <input type="submit" value="Edit!" id="link">
+                                            <input type="submit" value="<spring:message code="edit"/>" id="link">
                                             <sec:csrfInput/>
                                         </form>
 
@@ -132,7 +142,7 @@
                                     <td>
 
                                         <form action="#" method="post">
-                                            <input type="submit" value="Delete!" id="link">
+                                            <input type="submit" value="<spring:message code="delete"/>" id="link">
                                             <sec:csrfInput/>
                                         </form>
 
@@ -152,14 +162,14 @@
 
 
             <div style="margin-top: 50px; margin-bottom: 50px">
-                <h4>10 nearest flights</h4>
+                <h4><spring:message code="10nearestFlights"/></h4>
                 <table class="table-style-one">
-                    <td><c:out value="ID"/></td>
-                    <td><c:out value="From - To"/></td>
-                    <td><c:out value="Flight Date"/></td>
-                    <td><c:out value="ID - Airplane"/></td>
-                    <td><c:out value="Avaliable/Total seats"/></td>
-                    <td><c:out value="Price"/></td>
+                    <td><spring:message code="flightid"/></td>
+                    <td><spring:message code="direction"/></td>
+                    <td><spring:message code="flightdate"/></td>
+                    <td><spring:message code="airplane"/></td>
+                    <td><spring:message code="places"/></td>
+                    <td><spring:message code="price"/></td>
                     <c:forEach var="flight" items="${flights}">
                         <tr>
                             <td><c:out value="${flight.id}"/></td>
@@ -171,8 +181,9 @@
                             <td><c:out value="${flight.initPrice}"/></td>
                             <td>
 
-                                <form action="" method="post">
-                                    <input type="submit" value="Order!" id="link">
+                                <form action="placeanorder" method="post">
+                                    <input type="hidden" value="${flight.id}" name="id">
+                                    <input type="submit" value="<spring:message code="placeanorder"/>" id="link">
                                     <sec:csrfInput/>
                                 </form>
 
@@ -182,7 +193,7 @@
 
                                     <form action="editflight" method="post">
                                         <input type="hidden" name="id" value="${flight.id}">
-                                        <input type="submit" value="Edit!" id="link">
+                                        <input type="submit" value="<spring:message code="edit"/>" id="link">
                                         <sec:csrfInput/>
                                     </form>
 
@@ -190,7 +201,7 @@
                                 <td>
 
                                     <form action="#" method="post">
-                                        <input type="submit" value="Delete!" id="link">
+                                        <input type="submit" value="<spring:message code="delete"/>" id="link">
                                         <sec:csrfInput/>
                                     </form>
 
