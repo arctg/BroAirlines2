@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: dennis
@@ -13,46 +14,50 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css"/>">
-    <title>Add city and region</title>
+    <title><spring:message code="airplanePanel"/></title>
 </head>
 <body>
 
 
 <div id="header">
     <div id="hello">
-        <b style="color:tomato">
+        <div>
+            <a href="?lang=en">en</a>|<a href="?lang=ru">ru</a>
+        </div>
+        <spring:message code="hello"/>,
+        <b style="color:cadetblue">
             <sec:authentication property="principal.username"/>
         </b>
     </div>
-    <div id="hello">Today is: ${now.toString()}</div>
+    <div id="hello"><spring:message code="todayis"/>: ${now.toString()}</div>
     <h3 id="title">BroAirlines</h3>
 
     <div id="realheader">
         <div id="line">
             <c:url var="logoutUrl" value="/logout"/>
             <form action="${logoutUrl}" method="post">
-                <input type="submit" value="Logout!" id="link">
+                <input type="submit" value="<spring:message code="Logout"/>" id="link">
                 <sec:csrfInput/>
             </form>
         </div>
         <div id="line">
             <div id="link">
-                <a href="<c:url value="/cabinet"/>">Cabinet</a>
+                <a href="<c:url value="/cabinet"/>"><spring:message code="Cabinet"/></a>
             </div>
         </div>
         <div id="line">
             <div id="link">
-                <a href="<c:url value="/main"/>">Main</a>
+                <a href="<c:url value="/main"/>"><spring:message code="Main"/></a>
             </div>
         </div>
         <div id="line">
             <div id="link">
-                <a href="<c:url value="/admin/cities"/>">City panel</a>
+                <a href="<c:url value="/admin/cities"/>"><spring:message code="cityPanel"/></a>
             </div>
         </div>
         <div id="line">
             <div id="link">
-                <a href="<c:url value="/admin"/>">Admin panel</a>
+                <a href="<c:url value="/admin"/>"><spring:message code="AdminPanel"/></a>
             </div>
         </div>
     </div>
@@ -66,14 +71,14 @@
 
                 <form name="addairplane" method="POST" action="addairplane">
                     <input type="hidden" name="command" value="addairplane"/>
-                    Vendor name:<br/>
+                    <spring:message code="airplane.vendorName"/>:<br/>
                     <input name="vendorName"
                            id="input"
                            type="text"
                            size="20"
                            maxlength="32"
                            required><br/>
-                    Number of seats:<br/>
+                    <spring:message code="airplane.numOfSeats"/>:<br/>
                     <input name="numOfSeats"
                            id="input"
                            type="number"
@@ -83,7 +88,7 @@
                            size="6"
                            maxlength="6"
                            required><br/>
-                    <input type="submit" value="Add airplane" id="link">
+                    <input type="submit" value="<spring:message code="airplane.add"/>" id="link">
                     <sec:csrfInput/>
                 </form>
 
@@ -91,28 +96,44 @@
 
                 <div style="margin-top: 50px; margin-bottom: 50px">
                     <table class="table-style-one">
-                        <td><c:out value="ID"/></td>
-                        <td><c:out value="Vendor Name"/></td>
-                        <td><c:out value="Number of Seats"/></td>
+                        <td><spring:message code="airplane.id"/></td>
+                        <td><spring:message code="airplane.vendorName"/></td>
+                        <td><spring:message code="airplane.numOfSeats"/></td>
+                        <td><spring:message code="airplane.operable"/></td>
                         <c:forEach var="airplane" items="${airplanes}">
                             <tr>
                                 <td><c:out value="${airplane.id}"/></td>
                                 <td><c:out value="${airplane.vendorName}"/></td>
                                 <td><c:out value="${airplane.numOfSeats}"/></td>
+                                <td><c:out value="${airplane.isOperable()}"/></td>
                                 <td>
 
                                     <form action="" method="post">
-                                        <input type="submit" value="Edit!" id="link">
+                                        <input type="hidden" name="id" value="${airplane.id}">
+                                        <input type="submit" value="<spring:message code="edit"/>" id="link">
                                         <sec:csrfInput/>
                                     </form>
 
                                 </td>
                                 <td>
 
-                                    <form action="" method="post">
-                                        <input type="submit" value="Delete!" id="link">
-                                        <sec:csrfInput/>
-                                    </form>
+                                    <c:if test="${airplane.isOperable()==true}">
+                                        <form action="changeairplanestate" method="post">
+                                            <input type="hidden" name="id" value="${airplane.id}">
+                                            <input type="submit" value="<spring:message code="inoperable"/>" id="link">
+                                            <sec:csrfInput/>
+                                        </form>
+                                    </c:if>
+
+                                    <c:if test="${airplane.isOperable()==false}">
+                                        <form action="changeairplanestate" method="post">
+                                            <input type="hidden" name="id" value="${airplane.id}">
+                                            <input type="submit" value="<spring:message code="operable"/>" id="link">
+                                            <sec:csrfInput/>
+                                        </form>
+                                    </c:if>
+
+
 
                                 </td>
                             </tr>

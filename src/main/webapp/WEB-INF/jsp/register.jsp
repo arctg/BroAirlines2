@@ -36,8 +36,8 @@
             <input type="email" id="two" name="email" value="" size="32" maxlength="32" required autocomplete="off"><br/>
             <spring:message code="password"/><br/>
             <input type="password" name="password" value="" size="32" maxlength="32" required autocomplete="off"><br/>
-            <td><spring:message code="reg.phone"/>:<br/><spring:message code="reg.example"/>:0931234567<br/></td>
-            <input type="text" name="phone" value="" size="12" maxlength="12" required autocomplete="off"><br/>
+            <td><spring:message code="reg.phone"/>:<br/><spring:message code="reg.example"/>:+38(09)3763-1973<br/></td>
+            <input type="text" name="phone" value="" size="16" maxlength="16" required autocomplete="off" pattern="[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}"><br/>
             <input type="submit" name="submit" value="<spring:message code="reg.reg"/>" id="link">
             <sec:csrfInput/>
         </form>

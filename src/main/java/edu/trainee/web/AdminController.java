@@ -71,6 +71,16 @@ public class AdminController extends AbstractController {
     @RequestMapping(value = "admin/addairplane", method = RequestMethod.POST)
     public String addAirplane(Model model, @ModelAttribute Airplane airplane) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        airplane.setOperable(true);
+        airplaneService.save(airplane);
+        return "redirect:airplanes";
+    }
+
+    @Secured(value = "ROLE_ADMIN")
+    @RequestMapping(value = "admin/changeairplanestate", method = RequestMethod.POST)
+    public String changeAirplaneState(Model model, @RequestParam(value = "id") Airplane airplane) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        airplane.setOperable(!airplane.isOperable());
         airplaneService.save(airplane);
         return "redirect:airplanes";
     }
@@ -101,6 +111,10 @@ public class AdminController extends AbstractController {
     public String viewAirplanePanelPage(Model model, @RequestParam(value = "page", required = false) Integer id) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         model.addAttribute("airplanes", airplaneService.getAllAirplanes());
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String now = format.format(CurrentDate.getCurrentDate().getTime());
+        model.addAttribute("now", now);
 
         Long numberOfAirplanes = airplaneService.getNumberOfAirplanes();
         int pageSize = 5;
@@ -184,13 +198,18 @@ public class AdminController extends AbstractController {
             flight.setInitPrice(fixedPrice);
             flight.setTempPrice(fixedPrice);
             //List<Long> longList = new ArrayList<>(airplane.getNumOfSeats());
-            List<Long> longList = Arrays.asList(new Long[airplane.getNumOfSeats()]);
-            flight.setSeats(longList);
+
+
             flight.setAirplane(airplane);
             if (id == null) {
                 flight.setFlightCreationTime(Calendar.getInstance());
-            } else
+                List<Long> longList = Arrays.asList(new Long[airplane.getNumOfSeats()]);
+                flight.setSeats(longList);
+            } else {
                 flight.setFlightCreationTime(flightService.getFlightById(id).getFlightCreationTime());
+                flight.setSeats(flightService.getFlightById(id).getSeats());
+            }
+
 
         }
 

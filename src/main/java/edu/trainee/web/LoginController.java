@@ -2,6 +2,7 @@ package edu.trainee.web;
 
 import edu.trainee.domain.Roles;
 import edu.trainee.domain.User;
+import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +24,8 @@ import java.util.List;
 @Controller
 public class LoginController extends AbstractController {
 
+    private static final Logger logger = Logger.getLogger(LoginController.class);
+
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String viewTestPage(Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -41,13 +44,16 @@ public class LoginController extends AbstractController {
         ModelAndView model = new ModelAndView();
         if (error != null) {
             model.addObject("error", "Invalid username or password!");
+            logger.debug("invalid user data");
         }
         if (logout != null) {
             model.addObject("msg", "You've been logged out successfully.");
+            logger.debug("user logged out");
         }
 
         if(reg != null){
             model.addObject("msg","Registration successful");
+            logger.debug("new user registered");
         }
 
         model.setViewName("login");

@@ -40,6 +40,11 @@ public class UserController extends AbstractController {
             System.out.println(flight.getSeats());
         }
         System.out.println("Cart is:" + cart.getFlight());
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String now = format.format(CurrentDate.getCurrentDate().getTime());
+        model.addAttribute("now", now);
+
         return "main";
     }
 
@@ -52,6 +57,10 @@ public class UserController extends AbstractController {
 
         model.addAttribute("nearOrders",orderService.getNearest(CurrentDate.getCurrentDate(),userService.getUserByEmail(name).getId()));
         model.addAttribute("pastOrders",orderService.getPast(CurrentDate.getCurrentDate(), userService.getUserByEmail(name).getId()));
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String now = format.format(CurrentDate.getCurrentDate().getTime());
+        model.addAttribute("now", now);
 
         return "cabinet";
     }
@@ -125,6 +134,10 @@ public class UserController extends AbstractController {
         model.addAttribute("services", services);
         model.addAttribute("cart", cart);
 
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String now = format.format(CurrentDate.getCurrentDate().getTime());
+        model.addAttribute("now", now);
+
         return "result";
     }
 
@@ -146,6 +159,11 @@ public class UserController extends AbstractController {
 
 
         model.addAttribute("cart", cart);
+
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String now = format.format(CurrentDate.getCurrentDate().getTime());
+        model.addAttribute("now", now);
 
 
         return "payment";
@@ -189,9 +207,9 @@ public class UserController extends AbstractController {
             Order order = new Order(
                     flight,
                     user,
-                    cart.getBaggage() != null,
-                    cart.getPriorityBoarding() != null,
-                    flight.getTempPrice().add(cart.getPriorityBoarding()).add(cart.getBaggage()),
+                    cart.getBaggage() != BigDecimal.ZERO,
+                    cart.getPriorityBoarding() != BigDecimal.ZERO,
+                    flight.getTempPrice().add(cart.getPriorityBoarding()).add(cart.getBaggage().add(flightService.getExtra(flight.getId()))),
                     seat,
                     CurrentDate.getCurrentDate());
 

@@ -29,7 +29,7 @@
             <sec:authentication property="principal.username"/>
         </b>
     </div>
-    <div id="hello"><spring:message code="todayis"/>: ${now.time}</div>
+    <div id="hello"><spring:message code="todayis"/>: ${now}</div>
 
     <h3 id="title">BroAirlines</h3>
 
@@ -119,7 +119,7 @@
                                 <td><c:out value="${flight.airplane.id} - ${flight.airplane.vendorName}"/></td>
                                 <td><c:out
                                         value="${flight.airplane.numOfSeats-flight.seats.size()}/${flight.airplane.numOfSeats}"/></td>
-                                <td><c:out value="${flight.tempPrice}"/></td>
+                                <td><c:out value="${flight.initPrice}"/></td>
                                 <td>
 
                                     <form action="placeanorder" method="post">

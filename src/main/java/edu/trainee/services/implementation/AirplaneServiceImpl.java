@@ -48,17 +48,17 @@ public class AirplaneServiceImpl implements AirplaneService {
             else return getAllAirplanes();
         }
 
-        List<Airplane> wishList = getAllAirplanes();
+        List<Airplane> freeAirplanes = getAllAirplanes();
 
         for (Airplane airplane : getAllAirplanes()) {
             for (Flight flight : flightRepository.getAllFlights()) {
-                if ((flight.getAirplane().equals(airplane) & CurrentDate.getCurrentDate().compareTo(flight.getFlightTime()) <= 0)) {
-                    wishList.remove(airplane);
+                if (airplane.isOperable()==false || (flight.getAirplane().equals(airplane) && CurrentDate.getCurrentDate().compareTo(flight.getFlightTime()) <= 0 )) {
+                    freeAirplanes.remove(airplane);
                     System.out.println(airplane);
                 }
             }
         }
-        return wishList;
+        return freeAirplanes;
     }
 
     @Override

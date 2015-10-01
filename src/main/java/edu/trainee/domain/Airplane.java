@@ -26,14 +26,17 @@ public class Airplane {
     private Integer numOfSeats;
     @Column(nullable = false)
     private String vendorName;
+    @Column(nullable = false)
+    private Boolean operable;
 
     public Airplane() {
     }
 
 
-    public Airplane(Integer numOfSeats, String vendorName) {
+    public Airplane(Integer numOfSeats, String vendorName, Boolean operable) {
         this.numOfSeats = numOfSeats;
         this.vendorName = vendorName;
+        this.operable = operable;
     }
 
     public Long getId() {
@@ -60,6 +63,13 @@ public class Airplane {
         this.vendorName = vendorName;
     }
 
+    public Boolean isOperable() {
+        return operable;
+    }
+
+    public void setOperable(Boolean operable) {
+        this.operable = operable;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -70,7 +80,8 @@ public class Airplane {
 
         if (!id.equals(airplane.id)) return false;
         if (!numOfSeats.equals(airplane.numOfSeats)) return false;
-        return vendorName.equals(airplane.vendorName);
+        if (!vendorName.equals(airplane.vendorName)) return false;
+        return operable.equals(airplane.operable);
 
     }
 
@@ -79,6 +90,7 @@ public class Airplane {
         int result = id.hashCode();
         result = 31 * result + numOfSeats.hashCode();
         result = 31 * result + vendorName.hashCode();
+        result = 31 * result + operable.hashCode();
         return result;
     }
 
@@ -88,6 +100,7 @@ public class Airplane {
                 "id=" + id +
                 ", numOfSeats=" + numOfSeats +
                 ", vendorName='" + vendorName + '\'' +
+                ", operable=" + operable +
                 '}';
     }
 }
