@@ -9,6 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -71,15 +72,16 @@
                 <div>
                     <div class="box">
                         <div><spring:message code="flightid"/>:</div>
-                        <div id="values">${cart.flight.id}</div>
+                        <div id="values">${cart.flightId}</div>
                     </div>
                     <div class="box">
                         <div><spring:message code="direction"/>:</div>
-                        <div id="values">${cart.flight.flyFromCity.name} - ${cart.flight.flyToCity.name}</div>
+                        <div id="values">${flight.flyFromCity.name} - ${flight.flyToCity.name}</div>
                     </div>
                     <div class="box">
                         <div><spring:message code="flightdate"/>:</div>
-                        <div id="values">${cart.flight.flightTime.time}</div>
+                        <div id="values"> <fmt:formatDate value="${flight.flightTime.time}" type="both" pattern="yyyy-MM-dd HH:mm"/></div>
+
                     </div>
                     <div class="box">
                         <div><spring:message code="place"/>:</div>
@@ -87,7 +89,7 @@
                     </div>
                     <div class="box">
                         <div><spring:message code="airplane"/>:</div>
-                        <div id="values">${cart.flight.airplane.vendorName}</div>
+                        <div id="values">${flight.airplane.vendorName}</div>
                     </div>
                     <div class="box">
                         <div><spring:message code="additionalservices"/>:</div>
@@ -95,11 +97,11 @@
                     </div>
                     <div class="box">
                         <div><spring:message code="price"/>:</div>
-                        <div id="values">${cart.flight.initPrice}</div>
+                        <div id="values">${flight.initPrice}</div>
                     </div>
                     <div class="box">
                         <div><spring:message code="totalcost"/>:</div>
-                        <div id="values">${cart.flight.initPrice + cart.priorityBoarding + cart.baggage}</div>
+                        <div id="values">${flight.initPrice + cart.priorityBoarding + cart.baggage}</div>
                     </div>
 
                 </div>

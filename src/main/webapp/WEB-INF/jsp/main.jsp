@@ -115,7 +115,8 @@
                             <tr>
                                 <td><c:out value="${flight.id}"/></td>
                                 <td><c:out value="${flight.flyFromCity.name} - ${flight.flyToCity.name}"/></td>
-                                <td><c:out value="${flight.flightTime.time.toLocaleString()}"/></td>
+                                <td><fmt:formatDate value="${flight.flightTime.time}" type="both"
+                                                    pattern="yyyy-MM-dd HH:mm"/></td>
                                 <td><c:out value="${flight.airplane.id} - ${flight.airplane.vendorName}"/></td>
                                 <td><c:out
                                         value="${flight.airplane.numOfSeats-flight.seats.size()}/${flight.airplane.numOfSeats}"/></td>
@@ -174,7 +175,8 @@
                         <tr>
                             <td><c:out value="${flight.id}"/></td>
                             <td><c:out value="${flight.flyFromCity.name} - ${flight.flyToCity.name}"/></td>
-                            <td><c:out value="${flight.flightTime.time.toLocaleString()}"/></td>
+                            <td><fmt:formatDate value="${flight.flightTime.time}" type="both"
+                                                pattern="yyyy-MM-dd HH:mm"/></td>
                             <td><c:out value="${flight.airplane.id} - ${flight.airplane.vendorName}"/></td>
                             <td><c:out
                                     value="${flight.airplane.numOfSeats-flight.seats.size()}/${flight.airplane.numOfSeats}"/></td>

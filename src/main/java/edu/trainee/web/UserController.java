@@ -39,7 +39,7 @@ public class UserController extends AbstractController {
         for (Flight flight: flightService.get10Nearest(CurrentDate.getCurrentDate())){
             System.out.println(flight.getSeats());
         }
-        System.out.println("Cart is:" + cart.getFlight());
+        System.out.println("Cart is:" + cart.getFlightId());
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String now = format.format(CurrentDate.getCurrentDate().getTime());
@@ -129,10 +129,11 @@ public class UserController extends AbstractController {
         Map<String, BigDecimal> services = new HashMap<>();
         services.put("baggage", PriceFixer.BAGGAGE);
         services.put("priboarding", PriceFixer.PRIORITY_BOARDING);
-        cart.setFlight(flightService.getFlightById(Long.parseLong(id)));
+        cart.setFlightId(flightService.getFlightById(Long.parseLong(id)).getId());
 
         model.addAttribute("services", services);
         model.addAttribute("cart", cart);
+        model.addAttribute("flight",flightService.getFlightById(cart.getFlightId()));
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String now = format.format(CurrentDate.getCurrentDate().getTime());
@@ -159,6 +160,7 @@ public class UserController extends AbstractController {
 
 
         model.addAttribute("cart", cart);
+        model.addAttribute("flight",flightService.getFlightById(cart.getFlightId()));
 
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -173,11 +175,11 @@ public class UserController extends AbstractController {
     @Secured(value = "ROLE_USER")
     @RequestMapping(value = "pay")
     public String pay(Model model) {
-        if (flightService.hasFreeSeats(cart.getFlight())) {
+        if (flightService.hasFreeSeats(flightService.getFlightById(cart.getFlightId()))) {
             System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
             User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
             System.out.println(user);
-            Flight flight = cart.getFlight();
+            Flight flight = flightService.getFlightById(cart.getFlightId());
             System.out.println("Seats of flight: " + flight.getSeats().size());
             Long seat = null;
 
@@ -227,5 +229,6 @@ public class UserController extends AbstractController {
 
         return "redirect:main";
     }
+
 
 }

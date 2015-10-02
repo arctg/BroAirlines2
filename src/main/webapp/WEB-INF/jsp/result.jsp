@@ -9,6 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -21,7 +22,8 @@
     <div id="hello">
         <div>
             <a href="?lang=en">en</a>|<a href="?lang=ru">ru</a>
-        </div><spring:message code="hello"/>,
+        </div>
+        <spring:message code="hello"/>,
         <b style="color:cadetblue">
             <sec:authentication property="principal.username"/>
         </b>
@@ -61,8 +63,9 @@
     <div id="content1">
         <div align="center" id="centre">
             <div style="margin-bottom: 30px; margin-top: 10px; text-align: center; font-family: Tahoma; font-size: 13px;">
-                <div><spring:message code="direction"/>: ${cart.flight.flyFromCity.name} - ${cart.flight.flyToCity.name}</div>
-                <div><spring:message code="flightdate"/>: ${cart.flight.flightTime.time}</div>
+                <div><spring:message code="direction"/>: ${flight.flyFromCity.name} - ${flight.flyToCity.name}</div>
+                <div><spring:message code="flightdate"/>: <fmt:formatDate value="${flight.flightTime.time}" type="both"
+                                                                          pattern="yyyy-MM-dd HH:mm"/></div>
             </div>
 
             <div id="flight">
@@ -70,37 +73,37 @@
                 <div>
                     <div class="box">
                         <div><spring:message code="flightid"/>:</div>
-                        <div id="values">${cart.flight.id}</div>
+                        <div id="values">${cart.flightId}</div>
                     </div>
                     <div class="box">
                         <div><spring:message code="result.freeplaces"/>:</div>
-                        <div id="values">${cart.flight.airplane.numOfSeats - cart.flight.seats.size()}</div>
+                        <div id="values">${flight.airplane.numOfSeats - flight.seats.size()}</div>
                     </div>
                     <div class="box">
                         <div><spring:message code="airplane"/>:</div>
-                        <div id="values">${cart.flight.airplane.vendorName}</div>
+                        <div id="values">${flight.airplane.vendorName}</div>
                     </div>
                     <div class="box">
                         <div><spring:message code="price"/>:</div>
-                        <div id="values">${cart.flight.initPrice}</div>
+                        <div id="values">${flight.initPrice}</div>
                     </div>
                     <div class="box">
                         <div><spring:message code="flightdate"/>:</div>
-                        <div id="values">${cart.flight.flightTime.time}</div>
+                        <div id="values"><fmt:formatDate value="${flight.flightTime.time}" type="both"
+                                                         pattern="yyyy-MM-dd HH:mm"/></div>
+
                     </div>
                 </div>
                 <div id="flightFooter">
                     <div style="text-align:right">
                         <div class="box">
                             <form name="registerForm" method="POST" action="confirm" id="form">
-                                <div><input type="checkbox" name="baggage" value="true"><spring:message code="baggage"/></div>
-                                <div><input type="checkbox" name="priboarding" value="true"><spring:message code="priorityboarding"/></div>
+                                <div><input type="checkbox" name="baggage" value="true"><spring:message code="baggage"/>
+                                </div>
+                                <div><input type="checkbox" name="priboarding" value="true"><spring:message
+                                        code="priorityboarding"/></div>
                         </div>
                         <div id="line">
-                            <%--<input type="hidden" name="command" value="gotobook"/>--%>
-                            <%--<input type="hidden" name="flightId" value=${item.id}/>--%>
-                            <%--<input type="hidden" name="from" value="${requestScope.fromcity.getcName()}"/>--%>
-                            <%--<input type="hidden" name="to" value="${requestScope.tocity.getcName()}"/>--%>
                             <input name="submit" type="submit" value="<spring:message code="placeanorder"/>" id="link"/>
                             <sec:csrfInput/>
                             </form>

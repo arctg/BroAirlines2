@@ -85,8 +85,8 @@
                            step="1" min="2"
                            max="1000"
                            value=""
-                           size="6"
-                           maxlength="6"
+                           size="4"
+                           maxlength="4"
                            required><br/>
                     <input type="submit" value="<spring:message code="airplane.add"/>" id="link">
                     <sec:csrfInput/>

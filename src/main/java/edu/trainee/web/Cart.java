@@ -14,17 +14,17 @@ import java.util.Calendar;
 @Scope("session")
 public class Cart {
 
-    private Flight flight;
+    private Long flightId;
     private Calendar creationTime;
     private BigDecimal baggage;
     private BigDecimal priorityBoarding;
 
-    public Flight getFlight() {
-        return flight;
+    public Long getFlightId() {
+        return flightId;
     }
 
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public void setFlightId(Long flightId) {
+        this.flightId = flightId;
     }
 
     public Calendar getCreationTime() {
@@ -54,7 +54,7 @@ public class Cart {
     @Override
     public String toString() {
         return "Cart{" +
-                "flight=" + flight +
+                "flight=" + flightId +
                 ", creationTime=" + creationTime +
                 ", baggage=" + baggage +
                 ", priorityBoarding=" + priorityBoarding +

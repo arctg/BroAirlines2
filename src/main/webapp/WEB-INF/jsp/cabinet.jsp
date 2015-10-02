@@ -87,7 +87,8 @@
                         </div>
                         <div class="box">
                             <div><spring:message code="flightdate"/>:</div>
-                            <div id="values">${item.flight.flightTime.time}</div>
+                            <div id="values"><fmt:formatDate value="${item.flight.flightTime.time}" type="both"
+                                                             pattern="yyyy-MM-dd HH:mm"/></div>
                         </div>
                         <div class="box">
                             <div><spring:message code="direction"/>:</div>
@@ -145,7 +146,8 @@
                         </div>
                         <div class="box">
                             <div><fmt:message key="flightdate"/>:</div>
-                            <div id="values">${item.flight.flightTime.time}</div>
+                            <div id="values"><fmt:formatDate value="${item.flight.flightTime.time}" type="both"
+                                                             pattern="yyyy-MM-dd HH:mm"/></div>
                         </div>
                         <div class="box">
                             <div><fmt:message key="direction"/>:</div>
