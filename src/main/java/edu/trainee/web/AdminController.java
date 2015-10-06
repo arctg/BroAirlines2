@@ -29,9 +29,11 @@ public class AdminController extends AbstractController {
     @RequestMapping(value = "admin/cities", method = RequestMethod.GET)
     public String viewCityPanelPage(Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        model.addAttribute("message", "Hello from testController!");
-        model.addAttribute("helloName", name);
-        System.out.println();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String now = format.format(CurrentDate.getCurrentDate().getTime());
+        model.addAttribute("now", now);
+
         return "admin/cities";
     }
 
@@ -89,7 +91,7 @@ public class AdminController extends AbstractController {
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String viewAdminPanelPage(Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<Airplane> airplaneList = airplaneService.getFreeAirplanes();
+        List<Airplane> airplaneList = airplaneService.getFreeAirplaness(Calendar.getInstance());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String now = format.format(CurrentDate.getCurrentDate().getTime());
         model.addAttribute("now", now);

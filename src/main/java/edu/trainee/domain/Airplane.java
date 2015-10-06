@@ -13,9 +13,14 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "Airplane.getAll", query = "select a from Airplane a"),
         @NamedQuery(name = "Airplane.getNumberOfAirplanes", query = "select count (a.id) from Airplane a "),
+
         //@NamedQuery(name = "Airplane.ResultPerPage", query = "select a from Airplane a limit ")
         //Other named query
 })
+@NamedNativeQuery(name = "Airplane.getFreeAirplanes", query = "select a.airplane_id,a.numOfSeats,a.vendorName,a.operable " +
+        "from airplanes a " +
+        "left join flights f on a.airplane_id=f.airplane_id " +
+        "where f.airplane_id is null or f.flight_time<:curr_datetime and a.operable is TRUE ",resultClass = Airplane.class)
 public class Airplane {
 
     @Id

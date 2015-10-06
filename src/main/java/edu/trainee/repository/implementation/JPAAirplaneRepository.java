@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -65,5 +66,14 @@ public class JPAAirplaneRepository implements AirplaneRepository {
         query.setMaxResults(pageSize);
         List<Airplane> airplaneList = query.getResultList();
         return airplaneList;
+    }
+
+    @Override
+    public List<Airplane> getFreeAirplanes(Calendar currentDateTime) {
+        List<Airplane> typedQuery = em
+                .createNamedQuery("Airplane.getFreeAirplanes",Airplane.class)
+                .setParameter("curr_datetime",currentDateTime)
+                .getResultList();
+        return typedQuery;
     }
 }

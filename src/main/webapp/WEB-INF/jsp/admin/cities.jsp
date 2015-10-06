@@ -29,7 +29,7 @@
 
         </b>
     </div>
-    <div id="hello"><spring:message code="todayis"/>: ${now.toString()}</div>
+    <div id="hello"><spring:message code="todayis"/>: ${now}</div>
 
     <h3 id="title">BroAirlines</h3>
 

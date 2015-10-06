@@ -2,6 +2,7 @@ package edu.trainee.services;
 
 import edu.trainee.domain.Airplane;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -14,4 +15,5 @@ public interface AirplaneService {
     public List<Airplane> getFreeAirplanes();
     public Long getNumberOfAirplanes();
     public List<Airplane> getResultPerPage(int pageNumber,int pageSize);
+    public List<Airplane> getFreeAirplaness(Calendar currentDateTime);
 }

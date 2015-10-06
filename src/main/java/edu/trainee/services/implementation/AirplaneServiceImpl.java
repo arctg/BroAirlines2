@@ -41,6 +41,7 @@ public class AirplaneServiceImpl implements AirplaneService {
     }
 
     @Override
+    @Deprecated
     public List<Airplane> getFreeAirplanes() {
 
         if (flightRepository.getAllFlights().isEmpty()) {
@@ -70,5 +71,10 @@ public class AirplaneServiceImpl implements AirplaneService {
     public List<Airplane> getResultPerPage(int pageNumber,int pageSize) {
         if (pageSize>airplaneRepository.getNumberOfAirplanes()) return airplaneRepository.getAllAirplanes();
         return airplaneRepository.getResultPerPage(pageNumber,pageSize);
+    }
+
+    @Override
+    public List<Airplane> getFreeAirplaness(Calendar currentDateTime) {
+        return airplaneRepository.getFreeAirplanes(currentDateTime);
     }
 }

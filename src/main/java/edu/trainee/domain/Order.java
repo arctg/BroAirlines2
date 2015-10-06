@@ -12,11 +12,12 @@ import java.util.Calendar;
 @Table(name = "orders")
 @NamedQueries({
         @NamedQuery(name = "Order.getAll", query = "select o from Order o"),
-        @NamedQuery(name = "Order.getNearest", query = "select o " +
-                "from Order o " +
+        @NamedQuery(name = "Order.getNearest", query = "select o from Order o " +
                 "where o.flight.flightTime>:currentTime and o.user.id=:id " +
                 "order by o.flight.flightTime"),
-        @NamedQuery(name = "Order.getPast",query = "select o from Order o where o.flight.flightTime<:currentTime and o.user.id=:id order by o.orderCreationTime")
+        @NamedQuery(name = "Order.getPast",query = "select o from Order o " +
+                "where o.flight.flightTime<:currentTime and o.user.id=:id " +
+                "order by o.orderCreationTime")
         //Other named query
 })
 public class Order {
