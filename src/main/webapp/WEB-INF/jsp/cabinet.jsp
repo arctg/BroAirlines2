@@ -108,15 +108,15 @@
                         </div>
                     </div>
                     <div id="flightFooter">
-                        <div style="text-align:right">
-                            <div id="line">
-                                <form name="registerForm" method="POST" action="Controller" id="form">
-                                    <input type="hidden" name="command" value="deleteorder"/>
-                                    <input type="hidden" name="orderId" value="${item.id}"/>
-                                    <input name="submit" type="submit" value="<spring:message code="cancelorder"/>" id="link"/>
-                                </form>
-                            </div>
-                        </div>
+                        <%--<div style="text-align:right">--%>
+                            <%--<div id="line">--%>
+                                <%--<form name="registerForm" method="POST" action="Controller" id="form">--%>
+                                    <%--<input type="hidden" name="command" value="deleteorder"/>--%>
+                                    <%--<input type="hidden" name="orderId" value="${item.id}"/>--%>
+                                    <%--<input name="submit" type="submit" value="<spring:message code="cancelorder"/>" id="link"/>--%>
+                                <%--</form>--%>
+                            <%--</div>--%>
+                        <%--</div>--%>
                     </div>
                 </div>
             </c:forEach>

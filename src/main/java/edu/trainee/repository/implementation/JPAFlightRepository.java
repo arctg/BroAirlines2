@@ -24,12 +24,12 @@ public class JPAFlightRepository implements FlightRepository {
 
     @Override
     public Flight getFlightById(Long id) {
-       return em.find(Flight.class,id);
+        return em.find(Flight.class, id);
     }
 
     @Override
     public List<Flight> getAllFlights() {
-        TypedQuery<Flight> query = em.createNamedQuery("Flight.getAll",Flight.class);
+        TypedQuery<Flight> query = em.createNamedQuery("Flight.getAll", Flight.class);
         return query.getResultList();
     }
 
@@ -50,13 +50,17 @@ public class JPAFlightRepository implements FlightRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    @Transactional
+    public void delete(Flight flight) {
+        Flight tempFlight = em.find(Flight.class, flight.getId());
+        if (tempFlight != null) em.remove(tempFlight);
+
 
     }
 
     @Override
     public List<Flight> get10Nearest(Calendar calendar) {
-        Query query = em.createNamedQuery("Flight.getAllSortedByDate",Flight.class).setParameter("currentTime", calendar);
+        Query query = em.createNamedQuery("Flight.getAllSortedByDate", Flight.class).setParameter("currentTime", calendar);
         query.setFirstResult(0);
         query.setMaxResults(10);
         List<Flight> flightList = query.getResultList();
@@ -64,12 +68,13 @@ public class JPAFlightRepository implements FlightRepository {
     }
 
     @Override
+    @Transactional
     public List<Flight> find(City fromCity, City toCity, Calendar beginDate, Calendar endDate) {
-        TypedQuery<Flight> typedQuery = em.createNamedQuery("Flight.find",Flight.class).
-                setParameter("fromCity",fromCity).
-                setParameter("toCity",toCity).
-                setParameter("beginDate",beginDate).
-                setParameter("endDate",endDate);
+        TypedQuery<Flight> typedQuery = em.createNamedQuery("Flight.find", Flight.class).
+                setParameter("fromCity", fromCity).
+                setParameter("toCity", toCity).
+                setParameter("beginDate", beginDate).
+                setParameter("endDate", endDate);
         return typedQuery.getResultList();
     }
 }

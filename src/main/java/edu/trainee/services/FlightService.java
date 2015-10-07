@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface FlightService {
     public Long save(Flight flight);
+    public void delete(Flight flight);
     public List<Flight> getAllFlights();
     public Flight getFlightById(Long id);
     public List<Flight> get10Nearest(Calendar calendar);

@@ -69,7 +69,9 @@
             <c:if test="${not empty error}">
                 <div class="error">${error}</div>
             </c:if>
-
+            <c:if test="${not empty msg}">
+                <div class="msg">${msg}</div>
+            </c:if>
 
             <form name="findflight" method="GET" action="findflight">
                 <input type="hidden" name="command" value="findflight"/>
@@ -142,7 +144,7 @@
                                     </td>
                                     <td>
 
-                                        <form action="#" method="post">
+                                        <form action="deleteflight" method="post">
                                             <input type="submit" value="<spring:message code="delete"/>" id="link">
                                             <sec:csrfInput/>
                                         </form>
@@ -202,7 +204,8 @@
                                 </td>
                                 <td>
 
-                                    <form action="#" method="post">
+                                    <form action="deleteflight" method="post">
+                                        <input type="hidden" name="id" value="${flight.id}">
                                         <input type="submit" value="<spring:message code="delete"/>" id="link">
                                         <sec:csrfInput/>
                                     </form>

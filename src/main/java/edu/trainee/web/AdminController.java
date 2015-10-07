@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -192,6 +193,10 @@ public class AdminController extends AbstractController {
             //System.out.println("ID is: " + id.toString());
             if (id != null) {
                 flight.setId(id);
+                if (flightService.getFlightById(id).getSeats().size()>airplane.getNumOfSeats()){
+                    model.addAttribute("error","Plane with ID " + airplane.getId() + " doesn't have enough seats");
+                    return viewAdminPanelPage(model);
+                }
 
             }
             flight.setFlightTime(calendar);
@@ -200,6 +205,8 @@ public class AdminController extends AbstractController {
             flight.setInitPrice(fixedPrice);
             flight.setTempPrice(fixedPrice);
             //List<Long> longList = new ArrayList<>(airplane.getNumOfSeats());
+
+
 
 
             flight.setAirplane(airplane);
@@ -231,6 +238,18 @@ public class AdminController extends AbstractController {
         model.addAttribute("flight", flight);
         System.out.println(flight);
         return viewAdminPanelPage(model);
+    }
+
+    @Secured(value = "ROLE_ADMIN")
+    @RequestMapping(value = "deleteflight", method = RequestMethod.POST)
+    public String deleteFlight(Model model, @RequestParam(value = "id") Flight flight,RedirectAttributes redirectAttributes) {
+        if (flight.getSeats().size()>0){
+            redirectAttributes.addFlashAttribute("error", "flight with id " + flight.getId() + " cannot be deleted");
+            return "redirect:main";
+        }
+        flightService.delete(flight);
+        redirectAttributes.addFlashAttribute("msg", "flight with id " + flight.getId() + " has been deleted");
+        return "redirect:main";
     }
 
 

@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,5 +18,11 @@
         <c:if test="${url != null}"> URL: ${url} </c:if> </br>
         Exception: ${ex}
         StackTrace: ${st}
+
+        <div id="line">
+            <div id="link">
+                <a href="<c:url value="/main"/>" id="link"><spring:message code="Error.BackToMain"/></a>
+            </div>
+        </div>
     </body>
 </html>

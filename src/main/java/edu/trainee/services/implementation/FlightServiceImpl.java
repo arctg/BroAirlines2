@@ -28,6 +28,11 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
+    public void delete(Flight flight) {
+        flightRepository.delete(flight);
+    }
+
+    @Override
     public List<Flight> getAllFlights() {
         return flightRepository.getAllFlights();
     }

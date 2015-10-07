@@ -14,7 +14,7 @@ public interface FlightRepository {
     public List<Flight> getAllFlights();
     public Long save(Flight flight);
     public void update(Flight flight);
-    public void delete(Integer id);
+    public void delete(Flight flight);
     public List<Flight> get10Nearest(Calendar calendar);
     public List<Flight> find(City fromCity,City toCity, Calendar beginDate, Calendar endDate);
 }
